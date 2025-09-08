@@ -7,6 +7,17 @@
     // lo que devuelve la creación 
     public record CreateProductResult(Guid id);
 
+    public class CreateProductCommandValidatior : AbstractValidator<CreateProductCommand>
+    {
+        public CreateProductCommandValidatior()
+        {
+            RuleFor(x => x.Name).NotEmpty().WithMessage("Name is required");
+            RuleFor(x => x.Category).NotEmpty().WithMessage("Category is required");
+            RuleFor(x => x.ImageFile).NotEmpty().WithMessage("ImageFile is required");
+            RuleFor(x => x.Price).GreaterThan(0).WithMessage("Prince must be greater than 0");
+        }
+    }
+
     internal class CreateProductCommandHandler(IDocumentSession session) :
         ICommandHandler<CreateProductCommand, CreateProductResult>
     {
