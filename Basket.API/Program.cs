@@ -1,4 +1,6 @@
 using BuildingBlocks.Exceptions.Handler;
+using Discount.Grpc;
+using Discount.Grpc.Protos;
 using HealthChecks.UI.Client;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 
@@ -31,6 +33,25 @@ builder.Services.AddStackExchangeRedisCache(options => // inyeccion de dependenc
 {
     options.Configuration = builder.Configuration.GetConnectionString("Redis");
     //options.InstanceName = "Basket"; 
+});
+
+// Grpc services 
+// el ultimo código de este es una configuración especial ya que este nos proporcioanra que el 
+// micro de Discount se conecte correctamente con el de basket pero no se debe de hacer 
+// en producción 
+builder.Services.AddGrpcClient<DiscountProtoService.DiscountProtoServiceClient>(options =>
+{
+    options.Address = new Uri(builder.Configuration["GrpcSettings:DiscountUrl"]!);
+})
+.ConfigurePrimaryHttpMessageHandler(() =>
+{
+    var handler = new HttpClientHandler
+    {
+        ServerCertificateCustomValidationCallback =
+        HttpClientHandler.DangerousAcceptAnyServerCertificateValidator
+    };
+
+    return handler; 
 }); 
 
 builder.Services.AddExceptionHandler<CustomExceptionHandler>(); // manejo global de excepciones

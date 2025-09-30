@@ -12,7 +12,7 @@ namespace Basket.API.Basket.StoreBasket
         {
             app.MapPost("/basket", async (StoreBasketRequest request, ISender sender) =>
             {
-                var command = request.Adapt<StoreBasketCommmand>();
+                var command = request.Adapt<StoreBasketCommand>();
 
                 var result = await sender.Send(command);
 
