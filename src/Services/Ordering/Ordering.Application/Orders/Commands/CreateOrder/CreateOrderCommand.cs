@@ -14,8 +14,8 @@ namespace Ordering.Application.Orders.Commands.CreateOrder
         public CreateOrderCommandValidator()
         {
             RuleFor(x => x.Order.OrderName).NotEmpty().WithMessage("Name is requiered");
-            RuleFor(x => x.Order.CustomerId).NotNull().WithMessage("CustomerId is requiered"); 
-            RuleFor(x => x.Order.OrderItems).NotEmpty().WithMessage("OrderItems should not vacido")
+            RuleFor(x => x.Order.CustomerId).NotNull().WithMessage("CustomerId is requiered");
+            RuleFor(x => x.Order.OrderItems).NotEmpty().WithMessage("OrderItems should not vacido"); 
         }
     }
 }
